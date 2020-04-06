@@ -38,4 +38,15 @@ public class AccountResource {
         this.accountRepository.persistAccount(account);
         return Response.noContent().build();
     }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteAccount(@PathParam("id") Long id) {
+        Long deletedAccounts = this.accountRepository.deleteAccount(id);
+        if (deletedAccounts == 0) {
+            return Response.status(404).build();
+        }
+
+        return Response.noContent().build();
+    }
 }
