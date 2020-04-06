@@ -1,5 +1,6 @@
 package at.htl.srsguard.entity;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class Account {
         return id;
     }
 
+    @JsonbTransient
     public void setId(Long id) {
         this.id = id;
     }
@@ -43,6 +45,7 @@ public class Account {
         return key;
     }
 
+    @JsonbTransient
     public void setKey(String key) {
         this.key = key;
     }
@@ -53,5 +56,14 @@ public class Account {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    @JsonbTransient
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
