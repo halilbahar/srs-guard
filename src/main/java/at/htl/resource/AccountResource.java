@@ -18,6 +18,10 @@ public class AccountResource {
     @Produces("application/json")
     public Response getAccount(@PathParam("id") Long id) {
         Account account = this.accountRepository.find("id", id).firstResult();
+        if (account == null) {
+            return Response.status(404).build();
+        }
+
         return Response.ok(account).build();
     }
 
