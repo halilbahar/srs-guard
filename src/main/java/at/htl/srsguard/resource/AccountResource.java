@@ -1,17 +1,22 @@
 package at.htl.srsguard.resource;
 
+import at.htl.srsguard.error.FailedField;
 import at.htl.srsguard.repository.AccountRepository;
 import at.htl.srsguard.entity.Account;
+import at.htl.srsguard.service.ValidationService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/account")
 public class AccountResource {
 
     @Inject
     AccountRepository accountRepository;
+    @Inject
+    ValidationService validationService;
 
     @GET
     @Produces("application/json")
@@ -35,6 +40,11 @@ public class AccountResource {
     @Consumes("application/json")
     @Produces("application/json")
     public Response createAccount(Account account) {
+        List<FailedField> violations = this.validationService.validate(account);
+        if (violations != null) {
+            return Response.status(422).entity(violations).build();
+        }
+
         this.accountRepository.persistAccount(account);
         return Response.noContent().build();
     }
