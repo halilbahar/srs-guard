@@ -13,4 +13,9 @@ public class AccountRepository implements PanacheRepository<Account> {
     public void persistAccount(Account account) {
         this.persist(account);
     }
+
+    @Transactional
+    public Long deleteAccount(Long id) {
+        return this.delete("id", id);
+    }
 }
