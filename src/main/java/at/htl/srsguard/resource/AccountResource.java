@@ -1,6 +1,6 @@
-package at.htl.resource;
+package at.htl.srsguard.resource;
 
-import at.htl.repository.AccountRepository;
+import at.htl.srsguard.repository.AccountRepository;
 import at.htl.srsguard.entity.Account;
 
 import javax.inject.Inject;
