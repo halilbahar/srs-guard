@@ -14,6 +14,12 @@ public class AccountResource {
     AccountRepository accountRepository;
 
     @GET
+    @Produces("application/json")
+    public Response getAllAccounts() {
+        return Response.ok(this.accountRepository.findAll().list()).build();
+    }
+
+    @GET
     @Path("/{id}")
     @Produces("application/json")
     public Response getAccount(@PathParam("id") Long id) {
