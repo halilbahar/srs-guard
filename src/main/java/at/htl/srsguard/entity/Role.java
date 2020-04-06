@@ -1,9 +1,7 @@
 package at.htl.srsguard.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Role {
@@ -13,6 +11,8 @@ public class Role {
     private Long id;
     private String name;
     private String description;
+    @ManyToMany
+    private List<Permission> permissions;
 
     public Role(String name, String description) {
         this.name = name;
