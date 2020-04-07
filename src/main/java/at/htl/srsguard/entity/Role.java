@@ -1,5 +1,6 @@
 package at.htl.srsguard.entity;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class Role {
     private Long id;
     private String name;
     private String description;
+    @JsonbTransient
     @ManyToMany
     private List<Permission> permissions;
 
@@ -26,6 +28,7 @@ public class Role {
         return id;
     }
 
+    @JsonbTransient
     public void setId(Long id) {
         this.id = id;
     }
@@ -44,5 +47,13 @@ public class Role {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 }
