@@ -48,4 +48,16 @@ public class RoleResource {
         this.roleRepository.persistRole(role);
         return Response.noContent().build();
     }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteRole(@PathParam("id") Long id) {
+        System.out.println(id);
+        Long deletedRoles = this.roleRepository.deleteRole(id);
+        if (deletedRoles == 0) {
+            return Response.status(404).build();
+        }
+
+        return Response.noContent().build();
+    }
 }
