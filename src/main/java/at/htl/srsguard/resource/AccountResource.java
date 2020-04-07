@@ -1,6 +1,6 @@
 package at.htl.srsguard.resource;
 
-import at.htl.srsguard.error.FailedField;
+import at.htl.srsguard.model.FailedField;
 import at.htl.srsguard.repository.AccountRepository;
 import at.htl.srsguard.entity.Account;
 import at.htl.srsguard.service.ValidationService;

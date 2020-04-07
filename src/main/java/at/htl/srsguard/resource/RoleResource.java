@@ -1,7 +1,7 @@
 package at.htl.srsguard.resource;
 
 import at.htl.srsguard.entity.Role;
-import at.htl.srsguard.error.FailedField;
+import at.htl.srsguard.model.FailedField;
 import at.htl.srsguard.repository.RoleRepository;
 import at.htl.srsguard.service.ValidationService;
 

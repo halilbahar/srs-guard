@@ -1,4 +1,4 @@
-package at.htl.srsguard.error;
+package at.htl.srsguard.model;
 
 public class FailedField {
     private String key;

@@ -1,6 +1,6 @@
 package at.htl.srsguard.service;
 
-import at.htl.srsguard.error.FailedField;
+import at.htl.srsguard.model.FailedField;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
