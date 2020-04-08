@@ -8,9 +8,9 @@ public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private App app;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Stream stream;
 
     public Permission(App app, Stream stream) {

@@ -1,8 +1,10 @@
 package at.htl.srsguard.resource;
 
 import at.htl.srsguard.entity.Role;
+import at.htl.srsguard.model.AppStream;
 import at.htl.srsguard.model.FailedField;
 import at.htl.srsguard.repository.RoleRepository;
+import at.htl.srsguard.service.RolePermissionService;
 import at.htl.srsguard.service.ValidationService;
 
 import javax.inject.Inject;
@@ -17,6 +19,8 @@ public class RoleResource {
     RoleRepository roleRepository;
     @Inject
     ValidationService validationService;
+    @Inject
+    RolePermissionService rolePermissionService;
 
     @GET
     @Produces("application/json")
@@ -58,6 +62,18 @@ public class RoleResource {
             return Response.status(404).build();
         }
 
+        return Response.noContent().build();
+    }
+
+    @POST
+    @Path("/permission/{id}")
+    public Response addPermission(@PathParam("id") Long id, List<AppStream> appStreamList) {
+        Role role = this.roleRepository.find("id", id).firstResult();
+        if (role == null) {
+            return Response.status(404).build();
+        }
+
+        this.rolePermissionService.addPermission(role, appStreamList);
         return Response.noContent().build();
     }
 }
