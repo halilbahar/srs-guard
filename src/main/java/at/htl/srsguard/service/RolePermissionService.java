@@ -30,16 +30,21 @@ public class RolePermissionService {
             String appName = appStream.getApp();
             String streamName = appStream.getStream();
 
-            // First look for existing permission
+            // Check if the role already has that permission
+            boolean hasPermission = role.getPermissions().stream().anyMatch(permission ->
+                    permission.getApp().getName().equals(appName) && permission.getStream().getName().equals(streamName)
+            );
+            if (hasPermission) continue;
+
+            // Look for existing permission
             Permission existingPermission = this.permissionRepository.find(
                     "app.name = ?1 and stream.name = ?2", appName, streamName
             ).firstResult();
 
             // If you find an existing permission use that
             if (existingPermission != null) {
-                System.out.println("Found existing permission");
                 role.getPermissions().add(existingPermission);
-                break;
+                continue;
             }
 
             // Try to find if the app and stream already exist in the database
