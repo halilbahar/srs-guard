@@ -15,6 +15,15 @@ public class StreamRepository implements PanacheRepository<Stream> {
     }
 
     @Transactional
+    public boolean deleteStream(Stream stream) {
+        if (this.isPersistent(stream)) {
+            this.delete(stream);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
     public boolean deleteStream(Long id) {
         return this.delete("id", id) != 0;
     }
