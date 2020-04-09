@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class RolePermissionService {
@@ -29,16 +30,12 @@ public class RolePermissionService {
     RoleRepository roleRepository;
 
     @Transactional
-    public void addPermission(Role role, List<AppStream> appStreamList) {
+    public void addPermission(Long id, List<AppStream> appStreamList) {
+        Role role = this.roleRepository.findById(id);
+
         for (AppStream appStream : appStreamList) {
             String appName = appStream.getApp();
             String streamName = appStream.getStream();
-
-            // Check if the role already has that permission
-            boolean hasPermission = role.getPermissions().stream().anyMatch(permission ->
-                    permission.getApp().getName().equals(appName) && permission.getStream().getName().equals(streamName)
-            );
-            if (hasPermission) continue;
 
             // Look for existing permission
             Permission existingPermission = this.permissionRepository.find(
@@ -84,6 +81,20 @@ public class RolePermissionService {
         // First delete it from the role
         permissions.removeAll(toBeDeletedPermission);
         this.cleanUpDatabase();
+    }
+
+    public List<AppStream> getCommonPermissions(Role role, List<AppStream> appStreamList) {
+        return appStreamList.stream()
+                .filter(appStream -> {
+                    for (Permission permission : role.getPermissions()) {
+                        if (permission.getApp().getName().equals(appStream.getApp()) &&
+                                permission.getStream().getName().equals(appStream.getStream())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
     }
 
     private void cleanUpDatabase() {

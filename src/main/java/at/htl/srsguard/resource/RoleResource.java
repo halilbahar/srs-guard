@@ -1,5 +1,6 @@
 package at.htl.srsguard.resource;
 
+import at.htl.srsguard.entity.Permission;
 import at.htl.srsguard.entity.Role;
 import at.htl.srsguard.model.AppStream;
 import at.htl.srsguard.model.FailedField;
@@ -67,13 +68,20 @@ public class RoleResource {
 
     @POST
     @Path("/permission/{id}")
+    @Consumes("application/json")
+    @Produces("application/json")
     public Response addPermission(@PathParam("id") Long id, List<AppStream> appStreamList) {
-        Role role = this.roleRepository.find("id", id).firstResult();
+        Role role = this.roleRepository.findById(id);
         if (role == null) {
             return Response.status(404).build();
         }
 
-        this.rolePermissionService.addPermission(role, appStreamList);
+        List<AppStream> duplicatePermissions = this.rolePermissionService.getCommonPermissions(role, appStreamList);
+        if (duplicatePermissions.size() > 0) {
+            return Response.status(409).entity(duplicatePermissions).build();
+        }
+
+        this.rolePermissionService.addPermission(id, appStreamList);
         return Response.noContent().build();
     }
 
