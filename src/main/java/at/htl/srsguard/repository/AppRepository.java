@@ -15,6 +15,15 @@ public class AppRepository implements PanacheRepository<App> {
     }
 
     @Transactional
+    public boolean deleteApp(App app) {
+        if (this.isPersistent(app)) {
+            this.delete(app);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
     public boolean deleteApp(Long id) {
         return this.delete("id", id) != 0;
     }
