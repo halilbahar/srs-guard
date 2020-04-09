@@ -15,6 +15,15 @@ public class PermissionRepository implements PanacheRepository<Permission> {
     }
 
     @Transactional
+    public boolean deletePermission(Permission permission) {
+        if (this.isPersistent(permission)) {
+            this.delete(permission);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
     public boolean deletePermission(Long id) {
         return this.delete("id", id) != 0;
     }
