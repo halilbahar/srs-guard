@@ -76,4 +76,12 @@ public class RoleResource {
         this.rolePermissionService.addPermission(role, appStreamList);
         return Response.noContent().build();
     }
+
+    @DELETE
+    @Path("/permission/{id}")
+    @Consumes("application/json")
+    public Response removePermissions(@PathParam("id") Long id, List<AppStream> appStreamList) {
+        this.rolePermissionService.removePermissions(id, appStreamList);
+        return Response.noContent().build();
+    }
 }

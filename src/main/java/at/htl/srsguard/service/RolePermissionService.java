@@ -7,11 +7,13 @@ import at.htl.srsguard.entity.Stream;
 import at.htl.srsguard.model.AppStream;
 import at.htl.srsguard.repository.AppRepository;
 import at.htl.srsguard.repository.PermissionRepository;
+import at.htl.srsguard.repository.RoleRepository;
 import at.htl.srsguard.repository.StreamRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.LinkedList;
 import java.util.List;
 
 @ApplicationScoped
@@ -23,6 +25,8 @@ public class RolePermissionService {
     AppRepository appRepository;
     @Inject
     StreamRepository streamRepository;
+    @Inject
+    RoleRepository roleRepository;
 
     @Transactional
     public void addPermission(Role role, List<AppStream> appStreamList) {
@@ -59,5 +63,28 @@ public class RolePermissionService {
             this.permissionRepository.persistPermission(permission);
             role.getPermissions().add(permission);
         }
+    }
+
+    @Transactional
+    public void removePermissions(Long id, List<AppStream> appStreamList) {
+        Role role = this.roleRepository.findById(id);
+        List<Permission> permissions = role.getPermissions();
+        List<Permission> toBeDeletedPermission = new LinkedList<>();
+
+        for (AppStream appStream : appStreamList) {
+            for (Permission permission : permissions) {
+                // Collect the permission if you match app and stream
+                if (permission.getApp().getName().equals(appStream.getApp()) &&
+                        permission.getStream().getName().equals(appStream.getStream())) {
+                    toBeDeletedPermission.add(permission);
+                }
+            }
+        }
+
+        // First delete it from the role
+        permissions.removeAll(toBeDeletedPermission);
+        // Then delete the orphan permissions who dont belong to any permission
+        List<Permission> emptyPermissions = this.permissionRepository.find("size(roles) = 0").list();
+        emptyPermissions.forEach(this.permissionRepository::deletePermission);
     }
 }
