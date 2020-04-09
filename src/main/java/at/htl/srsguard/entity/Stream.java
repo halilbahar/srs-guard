@@ -1,9 +1,7 @@
 package at.htl.srsguard.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Stream {
@@ -12,6 +10,8 @@ public class Stream {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @OneToMany(mappedBy = "stream")
+    List<Permission> permissions;
 
     public Stream(String name) {
         this.name = name;
@@ -34,5 +34,13 @@ public class Stream {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 }
