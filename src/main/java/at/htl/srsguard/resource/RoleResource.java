@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Set;
 
 @Path("/role")
 public class RoleResource {
@@ -74,6 +75,11 @@ public class RoleResource {
         Role role = this.roleRepository.findById(id);
         if (role == null) {
             return Response.status(404).build();
+        }
+
+        Set<AppStream> duplicatePayload = this.rolePermissionService.getDuplicates(appStreamList);
+        if (duplicatePayload.size() > 0) {
+            return Response.status(422).entity(duplicatePayload).build();
         }
 
         List<AppStream> duplicatePermissions = this.rolePermissionService.getCommonPermissions(role, appStreamList);

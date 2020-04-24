@@ -13,8 +13,7 @@ import at.htl.srsguard.repository.StreamRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -95,6 +94,19 @@ public class RolePermissionService {
                     return false;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public Set<AppStream> getDuplicates(List<AppStream> appStreamList) {
+        Set<AppStream> duplicates = new LinkedHashSet<>();
+        Set<AppStream> uniques = new HashSet<>();
+
+        for (AppStream appStream : appStreamList) {
+            if (!uniques.add(appStream)) {
+                duplicates.add(appStream);
+            }
+        }
+
+        return duplicates;
     }
 
     private void cleanUpDatabase() {

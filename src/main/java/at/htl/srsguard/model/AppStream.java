@@ -1,5 +1,7 @@
 package at.htl.srsguard.model;
 
+import java.util.Objects;
+
 public class AppStream {
     private String app;
     private String stream;
@@ -26,5 +28,19 @@ public class AppStream {
 
     public void setStream(String stream) {
         this.stream = stream;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AppStream)) return false;
+        AppStream appStream = (AppStream) o;
+        return app.equals(appStream.app) &&
+                stream.equals(appStream.stream);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(app, stream);
     }
 }
