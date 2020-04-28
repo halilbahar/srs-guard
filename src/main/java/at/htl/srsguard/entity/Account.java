@@ -3,10 +3,8 @@ package at.htl.srsguard.entity;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 public class Account {
@@ -18,17 +16,17 @@ public class Account {
     private String name;
     private String key;
     private String description;
-    @ManyToMany
-    private List<Role> roles;
+    // TODO: Find problem with FetchType.LAZY,
+    //  (Unable to perform requested lazy initialization - session is closed and settings disallow loading outside the Session
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles = new LinkedList<>();
 
     public Account(String name, String description) {
-        this();
         this.name = name;
         this.description = description;
     }
 
     public Account() {
-        roles = new LinkedList<>();
     }
 
     public Long getId() {
@@ -65,18 +63,12 @@ public class Account {
         this.description = description;
     }
 
-    public List<String> getRoles() {
-        System.out.println(Arrays.toString(roles.toArray()));
-        return roles.stream().map(Role::getName).collect(Collectors.toList());
+    public List<Role> getRoles() {
+        return roles;
     }
 
     @JsonbTransient
     public void setRoles(List<Role> roles) {
         this.roles = roles;
-    }
-
-    @JsonbTransient
-    public List<Role> getRolesList() {
-        return roles;
     }
 }
