@@ -58,6 +58,8 @@ public class AccountResource {
 
     @DELETE
     @Path("/{id}")
+    @Produces("application/json")
+    @Transactional
     public Response deleteAccount(@PathParam("id") Long id) {
         Account account = this.accountRepository.findById(id);
         if (account == null) {
@@ -65,7 +67,7 @@ public class AccountResource {
         }
 
         this.accountRepository.delete(account);
-        return Response.noContent().build();
+        return Response.ok(account).build();
     }
 
     @POST
