@@ -44,6 +44,25 @@ public class AccountResourceTest {
     }
 
     @Test
+    public void testGetAccountById() {
+        JsonObject payload = this.createAccountPayload("test-account-3", "For the test 'testGetAccountById'");
+        Integer id = this.createAccount(payload);
+
+        given()
+                .pathParam("id", id.longValue())
+                .when()
+                .get("/account/{id}")
+                .then()
+                .statusCode(200)
+                .contentType(JSON)
+                .body("name", is(payload.getString("name")))
+                .body("description", is(payload.getString("description")))
+                .body("id", isA(Number.class));
+
+        this.deleteAccount(id);
+    }
+
+    @Test
     public void testDeleteAccount() {
         JsonObject payload = this.createAccountPayload("test-account-2", "For the test 'testDeleteAccount'");
         Integer id = this.createAccount(payload);
@@ -58,25 +77,6 @@ public class AccountResourceTest {
             .delete("/account/{id}")
         .then()
             .statusCode(404);
-    }
-
-    @Test
-    public void testGetAccountById() {
-        JsonObject payload = this.createAccountPayload("test-account-3", "For the test 'testGetAccountById'");
-        Integer id = this.createAccount(payload);
-
-        given()
-            .pathParam("id", id.longValue())
-        .when()
-            .get("/account/{id}")
-        .then()
-            .statusCode(200)
-            .contentType(JSON)
-            .body("name", is(payload.getString("name")))
-            .body("description", is(payload.getString("description")))
-            .body("id", isA(Number.class));
-
-        this.deleteAccount(id);
     }
 
     ////////////////////
