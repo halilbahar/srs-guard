@@ -65,6 +65,16 @@ public class AccountResourceTest {
         this.deleteAccount(id.longValue());
     }
 
+    @Test
+    public void testDeleteNotExistingAccount() {
+        given()
+            .pathParam("id", 999)
+        .when()
+            .delete("/account/{id}")
+        .then()
+            .statusCode(404);
+    }
+
     private Number createAccount(JsonObject payload) {
         return given()
             .contentType(JSON)
