@@ -28,12 +28,12 @@ public class AccountResourceTest {
     @Test
     public void testGetAllAccounts() {
         given()
-            .when()
-                .get("/account")
-            .then()
-                .statusCode(200)
-                .contentType(JSON)
-                .body("size()", is(0));
+        .when()
+            .get("/account")
+        .then()
+            .statusCode(200)
+            .contentType(JSON)
+            .body("size()", is(0));
     }
 
     @Test
@@ -49,15 +49,15 @@ public class AccountResourceTest {
         Integer id = this.createAccount(payload);
 
         given()
-                .pathParam("id", id.longValue())
-                .when()
-                .get("/account/{id}")
-                .then()
-                .statusCode(200)
-                .contentType(JSON)
-                .body("name", is(payload.getString("name")))
-                .body("description", is(payload.getString("description")))
-                .body("id", isA(Number.class));
+            .pathParam("id", id.longValue())
+        .when()
+            .get("/account/{id}")
+        .then()
+            .statusCode(200)
+            .contentType(JSON)
+            .body("name", is(payload.getString("name")))
+            .body("description", is(payload.getString("description")))
+            .body("id", isA(Number.class));
 
         this.deleteAccount(id);
     }
