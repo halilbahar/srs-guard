@@ -1,9 +1,9 @@
 package at.htl.srsguard.resource;
 
+import at.htl.srsguard.entity.Account;
 import at.htl.srsguard.entity.Role;
 import at.htl.srsguard.model.FailedField;
 import at.htl.srsguard.repository.AccountRepository;
-import at.htl.srsguard.entity.Account;
 import at.htl.srsguard.repository.RoleRepository;
 import at.htl.srsguard.service.ValidationService;
 
@@ -30,18 +30,6 @@ public class AccountResource {
         return Response.ok(this.accountRepository.findAll().list()).build();
     }
 
-    @GET
-    @Path("/{id}")
-    @Produces("application/json")
-    public Response getAccount(@PathParam("id") Long id) {
-        Account account = this.accountRepository.find("id", id).firstResult();
-        if (account == null) {
-            return Response.status(404).build();
-        }
-
-        return Response.ok(account).build();
-    }
-
     @POST
     @Consumes("application/json")
     @Produces("application/json")
@@ -54,6 +42,18 @@ public class AccountResource {
 
         this.accountRepository.persist(account);
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces("application/json")
+    public Response getAccount(@PathParam("id") Long id) {
+        Account account = this.accountRepository.find("id", id).firstResult();
+        if (account == null) {
+            return Response.status(404).build();
+        }
+
+        return Response.ok(account).build();
     }
 
     @DELETE
