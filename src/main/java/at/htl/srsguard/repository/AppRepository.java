@@ -6,25 +6,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 
+@Transactional
 @ApplicationScoped
 public class AppRepository implements PanacheRepository<App> {
-
-    @Transactional
-    public void persistApp(App app) {
-        this.persist(app);
-    }
-
-    @Transactional
-    public boolean deleteApp(App app) {
-        if (this.isPersistent(app)) {
-            this.delete(app);
-            return true;
-        }
-        return false;
-    }
-
-    @Transactional
-    public boolean deleteApp(Long id) {
-        return this.delete("id", id) != 0;
-    }
 }

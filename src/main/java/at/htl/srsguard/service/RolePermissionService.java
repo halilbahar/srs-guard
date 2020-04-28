@@ -54,7 +54,7 @@ public class RolePermissionService {
             if (requiredStream == null) requiredStream = new Stream(streamName);
 
             Permission permission = new Permission(requiredApp, requiredStream);
-            this.permissionRepository.persistPermission(permission);
+            this.permissionRepository.persist(permission);
             role.getPermissionList().add(permission);
         }
     }
@@ -107,15 +107,16 @@ public class RolePermissionService {
         return duplicates;
     }
 
+    @Transactional
     private void cleanUpDatabase() {
         // Delete all the permissions who don't belong to any role
         List<Permission> orphanPermissions = this.permissionRepository.find("size(roles) = 0").list();
-        orphanPermissions.forEach(this.permissionRepository::deletePermission);
+        orphanPermissions.forEach(this.permissionRepository::delete);
         // Delete all the app who don't belong to any permission
         List<App> orphanApps = this.appRepository.find("size(permissions) = 0").list();
-        orphanApps.forEach(this.appRepository::deleteApp);
+        orphanApps.forEach(this.appRepository::delete);
         // Delete all the streams who don't belong to any permission
         List<Stream> orphanStreams = this.streamRepository.find("size(permissions) = 0").list();
-        orphanStreams.forEach(this.streamRepository::deleteStream);
+        orphanStreams.forEach(this.streamRepository::delete);
     }
 }
