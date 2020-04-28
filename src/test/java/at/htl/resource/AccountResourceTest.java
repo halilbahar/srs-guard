@@ -76,7 +76,7 @@ public class AccountResourceTest {
             .body("description", is(payload.getString("description")))
             .body("id", isA(Number.class));
 
-        deleteAccount(id);
+        this.deleteAccount(id);
     }
 
     ////////////////////
