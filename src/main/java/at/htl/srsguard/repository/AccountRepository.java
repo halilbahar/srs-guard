@@ -1,6 +1,7 @@
 package at.htl.srsguard.repository;
 
 import at.htl.srsguard.entity.Account;
+import at.htl.srsguard.entity.Role;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -10,12 +11,7 @@ import javax.transaction.Transactional;
 public class AccountRepository implements PanacheRepository<Account> {
 
     @Transactional
-    public void persistAccount(Account account) {
-        this.persist(account);
-    }
-
-    @Transactional
-    public Long deleteAccount(Long id) {
-        return this.delete("id", id);
+    public boolean addRole(Account account, Role role) {
+        return account.getRolesList().add(role);
     }
 }

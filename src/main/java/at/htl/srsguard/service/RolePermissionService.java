@@ -29,9 +29,7 @@ public class RolePermissionService {
     RoleRepository roleRepository;
 
     @Transactional
-    public void addPermission(Long id, List<AppStream> appStreamList) {
-        Role role = this.roleRepository.findById(id);
-
+    public void addPermission(Role role, List<AppStream> appStreamList) {
         for (AppStream appStream : appStreamList) {
             String appName = appStream.getApp();
             String streamName = appStream.getStream();
@@ -43,7 +41,7 @@ public class RolePermissionService {
 
             // If you find an existing permission use that
             if (existingPermission != null) {
-                role.getPermissions().add(existingPermission);
+                role.getPermissionList().add(existingPermission);
                 continue;
             }
 
@@ -57,14 +55,14 @@ public class RolePermissionService {
 
             Permission permission = new Permission(requiredApp, requiredStream);
             this.permissionRepository.persistPermission(permission);
-            role.getPermissions().add(permission);
+            role.getPermissionList().add(permission);
         }
     }
 
     @Transactional
     public void removePermissions(Long id, List<AppStream> appStreamList) {
         Role role = this.roleRepository.findById(id);
-        List<Permission> permissions = role.getPermissions();
+        List<Permission> permissions = role.getPermissionList();
         List<Permission> toBeDeletedPermission = new LinkedList<>();
 
         for (AppStream appStream : appStreamList) {
@@ -85,7 +83,7 @@ public class RolePermissionService {
     public List<AppStream> getCommonPermissions(Role role, List<AppStream> appStreamList) {
         return appStreamList.stream()
                 .filter(appStream -> {
-                    for (Permission permission : role.getPermissions()) {
+                    for (Permission permission : role.getPermissionList()) {
                         if (permission.getApp().getName().equals(appStream.getApp()) &&
                                 permission.getStream().getName().equals(appStream.getStream())) {
                             return true;

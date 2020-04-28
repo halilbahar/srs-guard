@@ -1,6 +1,5 @@
 package at.htl.srsguard.resource;
 
-import at.htl.srsguard.entity.Permission;
 import at.htl.srsguard.entity.Role;
 import at.htl.srsguard.model.AppStream;
 import at.htl.srsguard.model.FailedField;
@@ -9,6 +8,7 @@ import at.htl.srsguard.service.RolePermissionService;
 import at.htl.srsguard.service.ValidationService;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -45,25 +45,27 @@ public class RoleResource {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
+    @Transactional
     public Response createRole(Role role) {
         List<FailedField> violations = this.validationService.validate(role);
         if (violations != null) {
             return Response.status(422).entity(violations).build();
         }
 
-        this.roleRepository.persistRole(role);
+        this.roleRepository.persist(role);
         return Response.noContent().build();
     }
 
     @DELETE
     @Path("/{id}")
+    @Transactional
     public Response deleteRole(@PathParam("id") Long id) {
-        System.out.println(id);
-        Long deletedRoles = this.roleRepository.deleteRole(id);
-        if (deletedRoles == 0) {
+        Role role = this.roleRepository.findById(id);
+        if (role == null) {
             return Response.status(404).build();
         }
 
+        this.roleRepository.delete(role);
         return Response.noContent().build();
     }
 
@@ -71,6 +73,7 @@ public class RoleResource {
     @Path("/permission/{id}")
     @Consumes("application/json")
     @Produces("application/json")
+    @Transactional
     public Response addPermission(@PathParam("id") Long id, List<AppStream> appStreamList) {
         Role role = this.roleRepository.findById(id);
         if (role == null) {
@@ -87,13 +90,14 @@ public class RoleResource {
             return Response.status(409).entity(duplicatePermissions).build();
         }
 
-        this.rolePermissionService.addPermission(id, appStreamList);
+        this.rolePermissionService.addPermission(role, appStreamList);
         return Response.noContent().build();
     }
 
     @DELETE
     @Path("/permission/{id}")
     @Consumes("application/json")
+    @Transactional
     public Response removePermissions(@PathParam("id") Long id, List<AppStream> appStreamList) {
         this.rolePermissionService.removePermissions(id, appStreamList);
         return Response.noContent().build();
