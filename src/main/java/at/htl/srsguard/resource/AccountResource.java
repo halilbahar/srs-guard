@@ -71,7 +71,6 @@ public class AccountResource {
     @POST
     @Path("/{id}/role/{roleId}")
     @Consumes("application/json")
-    @Produces("text/plain")
     public Response assignRole(@PathParam("id") Long id, @PathParam("roleId") Long roleId) {
         List<FailedField> failedFields = new LinkedList<>();
         Account account = this.accountRepository.findById(id);
@@ -91,7 +90,7 @@ public class AccountResource {
             return Response.status(409).build();
         }
 
-        this.accountRepository.addRole(account, role);
+        account.getRolesList().add(role);
         return Response.noContent().build();
     }
 }
