@@ -86,11 +86,11 @@ public class AccountResource {
             return Response.status(404).entity(failedFields).build();
         }
 
-        if (account.getRolesList().contains(role)) {
+        if (account.getRoles().contains(role)) {
             return Response.status(409).build();
         }
 
-        account.getRolesList().add(role);
+        account.getRoles().add(role);
         return Response.noContent().build();
     }
 }
