@@ -99,6 +99,11 @@ public class RoleResource {
     @Consumes("application/json")
     @Transactional
     public Response removePermissions(@PathParam("id") Long id, List<AppStream> appStreamList) {
+        Role role = this.roleRepository.findById(id);
+        if (role == null) {
+            return Response.status(404).build();
+        }
+
         this.rolePermissionService.removePermissions(id, appStreamList);
         return Response.noContent().build();
     }
