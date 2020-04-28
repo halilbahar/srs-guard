@@ -30,18 +30,6 @@ public class RoleResource {
         return Response.ok(this.roleRepository.findAll().list()).build();
     }
 
-    @GET
-    @Path("/{id}")
-    @Produces("application/json")
-    public Response getRole(@PathParam("id") Long id) {
-        Role role = this.roleRepository.find("id", id).firstResult();
-        if (role == null) {
-            return Response.status(404).build();
-        }
-
-        return Response.ok(role).build();
-    }
-
     @POST
     @Consumes("application/json")
     @Produces("application/json")
@@ -54,6 +42,18 @@ public class RoleResource {
 
         this.roleRepository.persist(role);
         return Response.noContent().build();
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces("application/json")
+    public Response getRole(@PathParam("id") Long id) {
+        Role role = this.roleRepository.find("id", id).firstResult();
+        if (role == null) {
+            return Response.status(404).build();
+        }
+
+        return Response.ok(role).build();
     }
 
     @DELETE
@@ -74,7 +74,7 @@ public class RoleResource {
     @Consumes("application/json")
     @Produces("application/json")
     @Transactional
-    public Response addPermission(@PathParam("id") Long id, List<AppStream> appStreamList) {
+    public Response addPermissions(@PathParam("id") Long id, List<AppStream> appStreamList) {
         Role role = this.roleRepository.findById(id);
         if (role == null) {
             return Response.status(404).build();
@@ -90,7 +90,7 @@ public class RoleResource {
             return Response.status(409).entity(duplicatePermissions).build();
         }
 
-        this.rolePermissionService.addPermission(role, appStreamList);
+        this.rolePermissionService.addPermissions(role, appStreamList);
         return Response.noContent().build();
     }
 

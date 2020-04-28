@@ -29,7 +29,7 @@ public class RolePermissionService {
     RoleRepository roleRepository;
 
     @Transactional
-    public void addPermission(Role role, List<AppStream> appStreamList) {
+    public void addPermissions(Role role, List<AppStream> appStreamList) {
         for (AppStream appStream : appStreamList) {
             String appName = appStream.getApp();
             String streamName = appStream.getStream();
