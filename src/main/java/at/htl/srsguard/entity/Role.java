@@ -1,8 +1,11 @@
 package at.htl.srsguard.entity;
 
+import at.htl.srsguard.model.AppStream;
+
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Role {
@@ -12,7 +15,6 @@ public class Role {
     private Long id;
     private String name;
     private String description;
-    @JsonbTransient
     @ManyToMany
     private List<Permission> permissions;
 
@@ -49,10 +51,18 @@ public class Role {
         this.description = description;
     }
 
-    public List<Permission> getPermissions() {
+    public List<AppStream> getPermissions() {
+        return permissions.stream()
+                .map(permission -> new AppStream(permission.getApp().getName(), permission.getStream().getName()))
+                .collect(Collectors.toList());
+    }
+
+    @JsonbTransient
+    public List<Permission> getPermissionList() {
         return permissions;
     }
 
+    @JsonbTransient
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
     }

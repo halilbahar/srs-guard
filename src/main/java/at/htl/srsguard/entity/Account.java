@@ -2,9 +2,10 @@ package at.htl.srsguard.entity;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Account {
@@ -61,12 +62,18 @@ public class Account {
         this.description = description;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public List<String> getRoles() {
+        System.out.println(Arrays.toString(roles.toArray()));
+        return roles.stream().map(Role::getName).collect(Collectors.toList());
     }
 
     @JsonbTransient
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    @JsonbTransient
+    public List<Role> getRolesList() {
+        return roles;
     }
 }
