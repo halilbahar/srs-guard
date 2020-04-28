@@ -41,7 +41,7 @@ public class AccountResource {
         }
 
         this.accountRepository.persist(account);
-        return Response.noContent().build();
+        return Response.ok(account).build();
     }
 
     @GET
