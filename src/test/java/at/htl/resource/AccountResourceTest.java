@@ -75,6 +75,31 @@ public class AccountResourceTest {
             .statusCode(404);
     }
 
+    public void testGetAccountById() {
+        JsonObject payload = this.createAccountPayload("test-account-3", "For the test 'testGetAccountById'");
+        Number id = this.createAccount(payload);
+
+        given()
+            .pathParam("id", id.longValue())
+        .when()
+            .get("/account/{id}")
+        .then()
+            .contentType(JSON)
+            .statusCode(200)
+            .body("name", is(payload.getString("name")))
+            .body("description", is(payload.getString("description")))
+            .body("id", isA(Number.class));
+
+        deleteAccount(id.longValue());
+    }
+
+    private JsonObject createAccountPayload(String name, String description) {
+        return Json.createObjectBuilder()
+                .add("name", name)
+                .add("description", description)
+                .build();
+    }
+
     private Number createAccount(JsonObject payload) {
         return given()
             .contentType(JSON)
