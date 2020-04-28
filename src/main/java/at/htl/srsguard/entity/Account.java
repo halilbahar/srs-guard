@@ -4,6 +4,7 @@ import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,11 +22,13 @@ public class Account {
     private List<Role> roles;
 
     public Account(String name, String description) {
+        this();
         this.name = name;
         this.description = description;
     }
 
     public Account() {
+        roles = new LinkedList<>();
     }
 
     public Long getId() {
