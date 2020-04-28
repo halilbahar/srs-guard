@@ -63,20 +63,18 @@ public class RolePermissionService {
     public void removePermissions(Long id, List<AppStream> appStreamList) {
         Role role = this.roleRepository.findById(id);
         List<Permission> permissions = role.getPermissionList();
-        List<Permission> toBeDeletedPermission = new LinkedList<>();
+        List<Permission> toBeDeletedPermissions = new LinkedList<>();
 
         for (AppStream appStream : appStreamList) {
             for (Permission permission : permissions) {
                 // Collect the permission if you match app and stream
-                if (permission.getApp().getName().equals(appStream.getApp()) &&
-                        permission.getStream().getName().equals(appStream.getStream())) {
-                    toBeDeletedPermission.add(permission);
+                if (appStream.equals(permission)) {
+                    toBeDeletedPermissions.add(permission);
                 }
             }
         }
 
-        // First delete it from the role
-        permissions.removeAll(toBeDeletedPermission);
+        permissions.removeAll(toBeDeletedPermissions);
         this.cleanUpDatabase();
     }
 
@@ -84,8 +82,7 @@ public class RolePermissionService {
         return appStreamList.stream()
                 .filter(appStream -> {
                     for (Permission permission : role.getPermissionList()) {
-                        if (permission.getApp().getName().equals(appStream.getApp()) &&
-                                permission.getStream().getName().equals(appStream.getStream())) {
+                        if (appStream.equals(permission)) {
                             return true;
                         }
                     }

@@ -1,5 +1,7 @@
 package at.htl.srsguard.model;
 
+import at.htl.srsguard.entity.Permission;
+
 import java.util.Objects;
 
 public class AppStream {
@@ -33,10 +35,16 @@ public class AppStream {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AppStream)) return false;
-        AppStream appStream = (AppStream) o;
-        return app.equals(appStream.app) &&
-                stream.equals(appStream.stream);
+        if (o instanceof AppStream) {
+            AppStream appStream = (AppStream) o;
+            return app.equals(appStream.app) &&
+                    stream.equals(appStream.stream);
+        } else if (o instanceof Permission) {
+            Permission permission = (Permission) o;
+            return permission.getApp().getName().equals(this.app) &&
+                    permission.getStream().getName().equals(this.stream);
+        }
+        return false;
     }
 
     @Override
