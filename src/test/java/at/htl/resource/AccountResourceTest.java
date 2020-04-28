@@ -51,6 +51,20 @@ public class AccountResourceTest {
         this.deleteAccount(id.longValue());
     }
 
+    @Test
+    public void testDeleteAccount() {
+        String accountName = "test-account-2";
+        String accountDescription = "For the test 'testDeleteAccount'";
+
+        JsonObject payload = Json.createObjectBuilder()
+                .add("name", accountName)
+                .add("description", accountDescription)
+                .build();
+
+        Number id = this.createAccount(payload);
+        this.deleteAccount(id.longValue());
+    }
+
     private Number createAccount(JsonObject payload) {
         return given()
             .contentType(JSON)
