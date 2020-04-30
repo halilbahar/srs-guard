@@ -139,6 +139,15 @@ public class AccountResourceTest {
     }
 
     @Test
+    public void testCreateAccountWithEmptyBodyNoContentType() {
+        given()
+        .when()
+            .post("/account")
+        .then()
+            .statusCode(415);
+    }
+
+    @Test
     public void testGetAccountById() {
         JsonObject payload = this.createAccountPayload("test-account", "test: testGetAccountById");
         Integer id = this.createAccount(payload);
