@@ -39,20 +39,20 @@ public class AccountResourceTest {
     }
 
     @Test
-    public void testCreateAccount() {
-        JsonObject payload = this.createAccountPayload("test-account-1", "For the test 'testCreateAccount'");
+    public void testCreateAndDeleteAccount() {
+        JsonObject payload = this.createAccountPayload("test-account", "test: testCreateAccount");
         Integer id = this.createAccount(payload);
         this.deleteAccount(id);
     }
 
     @Test
     public void testCreateAccountWithProvidedKeyAndId() {
-        String accountName = "test-account-4";
-        String accountDescription = "For the test 'testCreateAccountWithProvidedKey'";
-        String accountKey = "somerandomkey999";
+        String accountName = "test-account";
+        String accountDescription = "test: testCreateAccountWithProvidedKey";
+        String accountKey = "key999";
         int accountId = 999;
         JsonObject payload = Json.createObjectBuilder()
-                .add("name", "test-account-4")
+                .add("name", accountName)
                 .add("description", accountDescription)
                 .add("key", accountKey)
                 .add("id", accountId)
@@ -68,8 +68,8 @@ public class AccountResourceTest {
             .contentType(JSON)
             .body("name", is(accountName))
             .body("description", is(accountDescription))
-            .body("id", is(not(accountId)))
             .body("key", is(not(accountKey)))
+            .body("id", is(not(accountId)))
         .extract()
             .path("id");
 
@@ -79,7 +79,7 @@ public class AccountResourceTest {
     @Test
     public void testCreateAccountWithTooShortName() {
         String accountName = "ab";
-        JsonObject payload = this.createAccountPayload(accountName, "For the test 'testCreateAccountWithTooShortName'");
+        JsonObject payload = this.createAccountPayload(accountName, "test: testCreateAccountWithTooShortName");
         given()
             .contentType(JSON)
             .body(payload.toString())
@@ -96,7 +96,7 @@ public class AccountResourceTest {
     @Test
     public void testCreateAccountWithTooLongName() {
         String accountName = this.generateRandomString(256);
-        JsonObject payload = this.createAccountPayload(accountName, "For the test 'testCreateAccountWithTooLongName'");
+        JsonObject payload = this.createAccountPayload(accountName, "test: testCreateAccountWithTooLongName");
         given()
             .contentType(JSON)
             .body(payload.toString())
@@ -129,7 +129,7 @@ public class AccountResourceTest {
 
     @Test
     public void testGetAccountById() {
-        JsonObject payload = this.createAccountPayload("test-account-3", "For the test 'testGetAccountById'");
+        JsonObject payload = this.createAccountPayload("test-account", "test: testGetAccountById");
         Integer id = this.createAccount(payload);
 
         given()
@@ -148,7 +148,7 @@ public class AccountResourceTest {
 
     @Test
     public void testDeleteAccount() {
-        JsonObject payload = this.createAccountPayload("test-account-2", "For the test 'testDeleteAccount'");
+        JsonObject payload = this.createAccountPayload("test-account", "test: testDeleteAccount");
         Integer id = this.createAccount(payload);
         this.deleteAccount(id);
     }
