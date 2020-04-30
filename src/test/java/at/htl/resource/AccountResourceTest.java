@@ -141,6 +141,7 @@ public class AccountResourceTest {
             .contentType(JSON)
             .body("name", is(payload.getString("name")))
             .body("description", is(payload.getString("description")))
+            .body("key", hasLength(32))
             .body("id", isA(Number.class));
 
         this.deleteAccount(id);
@@ -196,6 +197,7 @@ public class AccountResourceTest {
             .contentType(JSON)
             .body("name", is(payload.getString("name")))
             .body("description", is(payload.getString("description")))
+            .body("key", hasLength(32))
             .body("id", isA(Number.class))
         .extract()
             .path("id");
@@ -213,6 +215,7 @@ public class AccountResourceTest {
             .contentType(JSON)
             .body("name", is(any(String.class)))
             .body("description", is(any(String.class)))
+            .body("key", hasLength(32))
             .body("id", is(id));
     }
 }
