@@ -1,5 +1,6 @@
 package at.htl.resource;
 
+import at.htl.util.Helper;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +35,7 @@ public class RoleResourceTest {
                 .add("name", "test-role")
                 .add("description", "test: testCreateAndDeleteRole")
                 .build();
+
         int id = given()
             .contentType(JSON)
             .body(payload.toString())
@@ -74,7 +76,7 @@ public class RoleResourceTest {
     @Test
     public void testCreateRoleWithTooLongName() {
         JsonObject payload = Json.createObjectBuilder()
-                .add("name", this.generateRandomString(256))
+                .add("name", Helper.generateRandomString(256))
                 .add("description", "test: testCreateRoleWithTooLongName")
                 .build();
         given()
@@ -105,16 +107,5 @@ public class RoleResourceTest {
             .body("name", is(any(String.class)))
             .body("description", is(any(String.class)))
             .body("id", is(id));
-    }
-
-    private String generateRandomString(int length) {
-        char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-        StringBuilder sb = new StringBuilder(length);
-        Random random = new Random();
-        for (int i = 0; i < length; i++) {
-            char c = chars[random.nextInt(chars.length)];
-            sb.append(c);
-        }
-        return sb.toString();
     }
 }
