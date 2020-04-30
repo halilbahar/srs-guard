@@ -167,6 +167,17 @@ public class RoleResourceTest {
             .statusCode(404);
     }
 
+    @Test
+    public void addPermissionToNonExistingRole() {
+        given()
+            .contentType(JSON)
+            .pathParam("id", 999)
+        .when()
+            .post("/role/{id}/permission")
+        .then()
+            .statusCode(404);
+    }
+
     ////////////////////
     // Util functions //
     ////////////////////
