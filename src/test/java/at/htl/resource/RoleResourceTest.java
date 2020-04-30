@@ -130,7 +130,7 @@ public class RoleResourceTest {
             .body("description", is(payload.getString("description")))
             .body("id", isA(Number.class))
         .extract()
-                .path("id");
+            .path("id");
 
         given()
             .pathParam("id", id)
