@@ -4,6 +4,7 @@ import at.htl.srsguard.util.ApiKeyGenerator;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Size(min = 3, max = 255, message = "Name needs to be between 3 and 255 characters!")
+    @NotBlank(message = "Name may not be empty!")
     private String name;
     private String key;
     @Size(max = 255, message = "Description may not be longer than 255!")
