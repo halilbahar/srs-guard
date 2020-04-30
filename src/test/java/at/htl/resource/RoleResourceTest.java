@@ -5,6 +5,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 import static io.restassured.RestAssured.given;
@@ -176,6 +177,44 @@ public class RoleResourceTest {
             .post("/role/{id}/permission")
         .then()
             .statusCode(404);
+    }
+
+    @Test
+    public void addPermissionWithDuplicateAppStreams() {
+        JsonObject rolePayload = Json.createObjectBuilder()
+                .add("name", "test-role")
+                .add("description", "test: testCreateRoleWithTooLongName")
+                .build();
+
+        JsonArray payload = Json.createArrayBuilder()
+                .add(Json.createObjectBuilder().add("app", "test-app").add("stream", "test-stream"))
+                .add(Json.createObjectBuilder().add("app", "test-app").add("stream", "test-stream"))
+                .build();
+
+        int id = given()
+            .contentType(JSON)
+            .body(rolePayload.toString())
+        .when()
+            .post("/role")
+        .then()
+            .statusCode(200)
+            .contentType(JSON)
+            .body("name", is(rolePayload.getString("name")))
+            .body("description", is(rolePayload.getString("description")))
+            .body("id", isA(Number.class))
+        .extract()
+            .path("id");
+
+        given()
+            .contentType(JSON)
+            .pathParam("id", id)
+        .then()
+            .statusCode(422)
+            .contentType(JSON)
+            .body("app[0]", is("test-app"))
+            .body("stream[0]", is("test-stream"));
+
+        this.deleteRole(id);
     }
 
     ////////////////////
