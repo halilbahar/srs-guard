@@ -183,7 +183,7 @@ public class RoleResourceTest {
     public void addPermissionWithDuplicateAppStreams() {
         JsonObject rolePayload = Json.createObjectBuilder()
                 .add("name", "test-role")
-                .add("description", "test: testCreateRoleWithTooLongName")
+                .add("description", "test: addPermissionWithDuplicateAppStreams")
                 .build();
 
         JsonArray payload = Json.createArrayBuilder()
@@ -208,8 +208,60 @@ public class RoleResourceTest {
         given()
             .contentType(JSON)
             .pathParam("id", id)
+            .body(payload)
+        .when()
+            .post("role/{id}/permission")
         .then()
             .statusCode(422)
+            .contentType(JSON)
+            .body("app[0]", is("test-app"))
+            .body("stream[0]", is("test-stream"));
+
+        this.deleteRole(id);
+    }
+
+    @Test
+    public void addExistingPermissionToRole() {
+        JsonObject rolePayload = Json.createObjectBuilder()
+                .add("name", "test-role")
+                .add("description", "test: addExistingPermissionToRole")
+                .build();
+
+        int id = given()
+            .contentType(JSON)
+            .body(rolePayload.toString())
+        .when()
+            .post("/role")
+        .then()
+            .statusCode(200)
+            .contentType(JSON)
+            .body("name", is(rolePayload.getString("name")))
+            .body("description", is(rolePayload.getString("description")))
+            .body("id", isA(Number.class))
+        .extract()
+            .path("id");
+
+        JsonArray payload = Json.createArrayBuilder()
+                .add(Json.createObjectBuilder().add("app", "test-app").add("stream", "test-stream"))
+                .build();
+
+        given()
+            .contentType(JSON)
+            .pathParam("id", id)
+            .body(payload.toString())
+        .when()
+            .post("/role/{id}/permission")
+        .then()
+            .statusCode(204);
+
+        given()
+            .contentType(JSON)
+            .pathParam("id", id)
+            .body(payload.toString())
+        .when()
+            .post("/role/{id}/permission")
+        .then()
+            .statusCode(409)
             .contentType(JSON)
             .body("app[0]", is("test-app"))
             .body("stream[0]", is("test-stream"));
