@@ -73,7 +73,7 @@ public class RoleResource {
     }
 
     @POST
-    @Path("/permission/{id}")
+    @Path("/{id}/permission")
     @Consumes("application/json")
     @Produces("application/json")
     @Transactional
@@ -98,7 +98,7 @@ public class RoleResource {
     }
 
     @DELETE
-    @Path("/permission/{id}")
+    @Path("/{id}/permission")
     @Consumes("application/json")
     @Transactional
     public Response removePermissions(@PathParam("id") Long id, List<AppStream> appStreamList) {
