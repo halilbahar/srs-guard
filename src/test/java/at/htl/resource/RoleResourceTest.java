@@ -30,7 +30,9 @@ public class RoleResourceTest {
         JsonObject payload = Json.createObjectBuilder()
                 .add("name", "test-role")
                 .add("description", "test: testCreateAndDeleteRole")
-                .build();
+                .add("permissions", Json.createArrayBuilder().add(
+                        Json.createObjectBuilder().add("app", "test-app").add("stream", "test-stream")
+                )).build();
 
         int id = given()
             .contentType(JSON)
