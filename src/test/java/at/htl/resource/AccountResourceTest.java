@@ -73,6 +73,23 @@ public class AccountResourceTest {
     }
 
     @Test
+    public void testCreateAccountWithTooShortName() {
+        String accountName = "ab";
+        JsonObject payload = this.createAccountPayload(accountName, "For the test 'testCreateAccountWithTooShortName'");
+        given()
+            .contentType(JSON)
+            .body(payload.toString())
+        .when()
+            .post("/account")
+        .then()
+            .statusCode(422)
+            .contentType(JSON)
+            .body("key[0]", is("name"))
+            .body("message[0]", is("Name needs to be between 3 and 255 characters!"))
+            .body("value[0]", is(accountName));
+    }
+
+    @Test
     public void testGetAccountById() {
         JsonObject payload = this.createAccountPayload("test-account-3", "For the test 'testGetAccountById'");
         Integer id = this.createAccount(payload);
