@@ -157,6 +157,16 @@ public class RoleResourceTest {
             .statusCode(404);
     }
 
+    @Test
+    public void testDeleteNonExistingRoleById() {
+        given()
+            .pathParam("id", 999)
+        .when()
+            .delete("/role/{id}")
+        .then()
+            .statusCode(404);
+    }
+
     ////////////////////
     // Util functions //
     ////////////////////
