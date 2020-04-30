@@ -148,7 +148,7 @@ public class RoleResourceTest {
     }
 
     @Test
-    public void testGetNonExistingRoleById() {
+    public void testGetNonExistingRole() {
         given()
             .pathParam("id", 999)
         .when()
@@ -158,7 +158,7 @@ public class RoleResourceTest {
     }
 
     @Test
-    public void testDeleteNonExistingRoleById() {
+    public void testDeleteNonExistingRole() {
         given()
             .pathParam("id", 999)
         .when()
