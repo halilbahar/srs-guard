@@ -46,14 +46,16 @@ public class AccountResourceTest {
     }
 
     @Test
-    public void testCreateAccountWithProvidedKey() {
+    public void testCreateAccountWithProvidedKeyAndId() {
         String accountName = "test-account-4";
         String accountDescription = "For the test 'testCreateAccountWithProvidedKey'";
         String accountKey = "somerandomkey999";
+        int accountId = 999;
         JsonObject payload = Json.createObjectBuilder()
                 .add("name", "test-account-4")
                 .add("description", accountDescription)
                 .add("key", accountKey)
+                .add("id", accountId)
                 .build();
 
         Number id = given()
@@ -66,7 +68,7 @@ public class AccountResourceTest {
             .contentType(JSON)
             .body("name", is(accountName))
             .body("description", is(accountDescription))
-            .body("id", isA(Number.class))
+            .body("id", is(not(accountId)))
             .body("key", is(not(accountKey)))
         .extract()
             .path("id");
