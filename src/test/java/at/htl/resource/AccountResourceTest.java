@@ -44,6 +44,35 @@ public class AccountResourceTest {
     }
 
     @Test
+    public void testCreateAccountWithProvidedKey() {
+        String accountName = "test-account-4";
+        String accountDescription = "For the test 'testCreateAccountWithProvidedKey'";
+        String accountKey = "somerandomkey999";
+        JsonObject payload = Json.createObjectBuilder()
+                .add("name", "test-account-4")
+                .add("description", accountDescription)
+                .add("key", accountKey)
+                .build();
+
+        Number id = given()
+            .contentType(JSON)
+            .body(payload.toString())
+        .when()
+            .post("/account")
+        .then()
+            .statusCode(200)
+            .contentType(JSON)
+            .body("name", is(accountName))
+            .body("description", is(accountDescription))
+            .body("id", isA(Number.class))
+            .body("key", is(not(accountKey)))
+        .extract()
+            .path("id");
+
+        deleteAccount(id.intValue());
+    }
+
+    @Test
     public void testGetAccountById() {
         JsonObject payload = this.createAccountPayload("test-account-3", "For the test 'testGetAccountById'");
         Integer id = this.createAccount(payload);
