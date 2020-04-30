@@ -6,6 +6,7 @@ import at.htl.srsguard.model.FailedField;
 import at.htl.srsguard.repository.RoleRepository;
 import at.htl.srsguard.service.RolePermissionService;
 import at.htl.srsguard.service.ValidationService;
+import org.hibernate.Hibernate;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -66,6 +67,7 @@ public class RoleResource {
             return Response.status(404).build();
         }
 
+        Hibernate.initialize(role.getPermissionList());
         this.roleRepository.delete(role);
         return Response.ok(role).build();
     }

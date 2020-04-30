@@ -19,7 +19,7 @@ public class Role {
     private String name;
     @Size(max = 255, message = "Description may not be longer than 255!")
     private String description;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<Permission> permissions = new LinkedList<>();
 
     public Role(String name, String description) {
