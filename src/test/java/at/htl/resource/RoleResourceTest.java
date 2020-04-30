@@ -3,6 +3,7 @@ package at.htl.resource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
+import javax.json.Json;
 import javax.json.JsonObject;
 
 import static io.restassured.RestAssured.given;
@@ -22,6 +23,16 @@ public class RoleResourceTest {
             .statusCode(200)
             .contentType(JSON)
             .body("size()", is(0));
+    }
+
+    @Test
+    public void testCreateAndDeleteRole() {
+        JsonObject payload = Json.createObjectBuilder()
+                .add("name", "test-role")
+                .add("description", "test: testCreateAndDeleteRole")
+                .build();
+        int id = this.createRole(payload);
+        this.deleteRole(id);
     }
 
     ////////////////////
