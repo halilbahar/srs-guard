@@ -111,6 +111,42 @@ public class RoleResourceTest {
             .body("value[0]", is(payload.getString("description")));
     }
 
+    @Test
+    public void testGetRoleById() {
+        JsonObject payload = Json.createObjectBuilder()
+                .add("name", "test-role")
+                .add("description", "test: testCreateAndDeleteRole")
+                .build();
+
+        int id = given()
+            .contentType(JSON)
+            .body(payload.toString())
+        .when()
+            .post("/role")
+        .then()
+            .statusCode(200)
+            .contentType(JSON)
+            .body("name", is(payload.getString("name")))
+            .body("description", is(payload.getString("description")))
+            .body("id", isA(Number.class))
+        .extract()
+                .path("id");
+
+        given()
+            .pathParam("id", id)
+        .when()
+            .get("/role/{id}")
+        .then()
+            .statusCode(200)
+            .contentType(JSON)
+            .body("name", is(payload.getString("name")))
+            .body("description", is(payload.getString("description")))
+            .body("id", is(id))
+            .body("permissions", is(empty()));
+
+        this.deleteRole(id);
+    }
+
     ////////////////////
     // Util functions //
     ////////////////////
