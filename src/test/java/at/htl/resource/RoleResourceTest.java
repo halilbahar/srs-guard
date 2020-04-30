@@ -91,6 +91,26 @@ public class RoleResourceTest {
             .body("value[0]", is(payload.getString("name")));
     }
 
+    @Test
+    public void testCreateRoleWithTooLongDescription() {
+        JsonObject payload = Json.createObjectBuilder()
+                .add("name", "test-role")
+                .add("description", Helper.generateRandomString(256))
+                .build();
+
+        given()
+            .contentType(JSON)
+            .body(payload.toString())
+        .when()
+            .post("/role")
+        .then()
+            .statusCode(422)
+            .contentType(JSON)
+            .body("key[0]", is("description"))
+            .body("message[0]", is("Description may not be longer than 255!"))
+            .body("value[0]", is(payload.getString("description")));
+    }
+
     ////////////////////
     // Util functions //
     ////////////////////
