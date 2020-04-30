@@ -36,6 +36,10 @@ public class AccountResource {
     @Produces("application/json")
     @Transactional
     public Response createAccount(Account account) {
+        if (account == null) {
+            return Response.status(422).build();
+        }
+
         List<FailedField> violations = this.validationService.validate(account);
         if (violations != null) {
             return Response.status(422).entity(violations).build();
