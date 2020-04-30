@@ -7,6 +7,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.patch;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.any;
@@ -33,6 +34,26 @@ public class RoleResourceTest {
                 .build();
         int id = this.createRole(payload);
         this.deleteRole(id);
+    }
+
+    @Test
+    public void testCreateRoleWithTooShortName() {
+        JsonObject payload = Json.createObjectBuilder()
+                .add("name", "ab")
+                .add("description", "test: testCreateAccountWithTooShortName")
+                .build();
+
+        given()
+            .contentType(JSON)
+            .body(payload.toString())
+        .when()
+            .post("/role")
+        .then()
+            .statusCode(422)
+            .contentType(JSON)
+            .body("key[0]", is("name"))
+            .body("message[0]", is("Name needs to be between 3 and 255 characters!"))
+            .body("value[0]", is(payload.getString("name")));
     }
 
     ////////////////////
