@@ -58,6 +58,7 @@ public class RoleResource {
 
     @DELETE
     @Path("/{id}")
+    @Produces("application/json")
     @Transactional
     public Response deleteRole(@PathParam("id") Long id) {
         Role role = this.roleRepository.findById(id);
