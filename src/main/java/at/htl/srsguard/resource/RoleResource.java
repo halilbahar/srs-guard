@@ -66,7 +66,7 @@ public class RoleResource {
         }
 
         this.roleRepository.delete(role);
-        return Response.noContent().build();
+        return Response.ok(role).build();
     }
 
     @POST
