@@ -4,6 +4,7 @@ import at.htl.srsguard.model.AppStream;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +15,9 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Size(min = 3, max = 255, message = "Name needs to be between 3 and 255 characters!")
     private String name;
+    @Size(max = 255, message = "Description may not be longer than 255!")
     private String description;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Permission> permissions = new LinkedList<>();
