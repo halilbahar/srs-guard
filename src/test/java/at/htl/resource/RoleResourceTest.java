@@ -34,7 +34,20 @@ public class RoleResourceTest {
                 .add("name", "test-role")
                 .add("description", "test: testCreateAndDeleteRole")
                 .build();
-        int id = this.createRole(payload);
+        int id = given()
+            .contentType(JSON)
+            .body(payload.toString())
+        .when()
+            .post("/role")
+        .then()
+            .statusCode(200)
+            .contentType(JSON)
+            .body("name", is(payload.getString("name")))
+            .body("description", is(payload.getString("description")))
+            .body("id", isA(Number.class))
+        .extract()
+            .path("id");
+
         this.deleteRole(id);
     }
 
@@ -80,24 +93,6 @@ public class RoleResourceTest {
     ////////////////////
     // Util functions //
     ////////////////////
-
-    private Integer createRole(JsonObject payload) {
-        Number id = given()
-            .contentType(JSON)
-            .body(payload.toString())
-        .when()
-            .post("/role")
-        .then()
-            .statusCode(200)
-            .contentType(JSON)
-            .body("name", is(payload.getString("name")))
-            .body("description", is(payload.getString("description")))
-            .body("id", isA(Number.class))
-        .extract()
-            .path("id");
-
-        return id.intValue();
-    }
 
     private void deleteRole(Integer id) {
         given()
