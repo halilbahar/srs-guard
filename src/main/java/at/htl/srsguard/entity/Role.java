@@ -53,7 +53,7 @@ public class Role {
     }
 
     public List<AppStream> getPermissions() {
-        return new LinkedList<>(permissions).stream()
+        return permissions.stream()
                 .map(permission -> new AppStream(permission.getApp().getName(), permission.getStream().getName()))
                 .collect(Collectors.toList());
     }
