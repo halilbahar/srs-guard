@@ -16,7 +16,7 @@ public class Role {
     private Long id;
     private String name;
     private String description;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Permission> permissions = new LinkedList<>();
 
     public Role(String name, String description) {
