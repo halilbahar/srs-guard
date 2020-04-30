@@ -19,9 +19,7 @@ public class Account {
     private String key;
     @Size(max = 255, message = "Description may not be longer than 255!")
     private String description;
-    // TODO: Find problem with FetchType.LAZY,
-    //  (Unable to perform requested lazy initialization - session is closed and settings disallow loading outside the Session
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<Role> roles = new LinkedList<>();
 
     public Account(String name, String description) {

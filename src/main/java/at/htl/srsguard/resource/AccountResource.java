@@ -6,6 +6,7 @@ import at.htl.srsguard.model.FailedField;
 import at.htl.srsguard.repository.AccountRepository;
 import at.htl.srsguard.repository.RoleRepository;
 import at.htl.srsguard.service.ValidationService;
+import org.hibernate.Hibernate;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -66,6 +67,7 @@ public class AccountResource {
             return Response.status(404).build();
         }
 
+        Hibernate.initialize(account.getRoles());
         this.accountRepository.delete(account);
         return Response.ok(account).build();
     }
