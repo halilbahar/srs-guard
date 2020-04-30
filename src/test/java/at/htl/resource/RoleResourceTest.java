@@ -48,14 +48,14 @@ public class RoleResourceTest {
 
     private void deleteRole(Integer id) {
         given()
-                .pathParam("id", id)
-                .when()
-                .delete("/account/{id}")
-                .then()
-                .statusCode(200)
-                .contentType(JSON)
-                .body("name", is(any(String.class)))
-                .body("description", is(any(String.class)))
-                .body("id", is(id));
+            .pathParam("id", id)
+        .when()
+            .delete("/role/{id}")
+        .then()
+            .statusCode(200)
+            .contentType(JSON)
+            .body("name", is(any(String.class)))
+            .body("description", is(any(String.class)))
+            .body("id", is(id));
     }
 }
