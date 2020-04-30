@@ -111,6 +111,23 @@ public class AccountResourceTest {
     }
 
     @Test
+    public void testCreateAccountWithTooLongDescription() {
+        String accountDescription = this.generateRandomString(256);
+        JsonObject payload = this.createAccountPayload("test-account", accountDescription);
+        given()
+            .contentType(JSON)
+            .body(payload.toString())
+        .when()
+            .post("/account")
+        .then()
+            .statusCode(422)
+            .contentType(JSON)
+            .body("key[0]", is("description"))
+            .body("message[0]", is("Description may not be longer than 255!"))
+            .body("value[0]", is(accountDescription));
+    }
+
+    @Test
     public void testGetAccountById() {
         JsonObject payload = this.createAccountPayload("test-account-3", "For the test 'testGetAccountById'");
         Integer id = this.createAccount(payload);
