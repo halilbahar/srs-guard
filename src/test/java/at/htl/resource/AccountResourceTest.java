@@ -10,6 +10,8 @@ import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
+import java.util.Random;
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
@@ -90,6 +92,23 @@ public class AccountResourceTest {
     }
 
     @Test
+    public void testCreateAccountWithTooLongName() {
+        String accountName = this.generateRandomString(256);
+        JsonObject payload = this.createAccountPayload(accountName, "For the test 'testCreateAccountWithTooLongName'");
+        given()
+            .contentType(JSON)
+            .body(payload.toString())
+        .when()
+            .post("/account")
+        .then()
+            .statusCode(422)
+            .contentType(JSON)
+            .body("key[0]", is("name"))
+            .body("message[0]", is("Name needs to be between 3 and 255 characters!"))
+            .body("value[0]", is(accountName));
+    }
+
+    @Test
     public void testGetAccountById() {
         JsonObject payload = this.createAccountPayload("test-account-3", "For the test 'testGetAccountById'");
         Integer id = this.createAccount(payload);
@@ -128,6 +147,17 @@ public class AccountResourceTest {
     ////////////////////
     // Util functions //
     ////////////////////
+
+    private String generateRandomString(int length) {
+        char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+        StringBuilder sb = new StringBuilder(length);
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
+        }
+        return sb.toString();
+    }
 
     private JsonObject createAccountPayload(String name, String description) {
         return Json.createObjectBuilder()
