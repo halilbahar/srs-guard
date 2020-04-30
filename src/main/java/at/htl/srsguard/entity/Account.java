@@ -1,8 +1,12 @@
 package at.htl.srsguard.entity;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,9 +16,10 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Name may not be empty!")
+    @Size(min = 3, max = 255, message = "Name needs to be between 3 and 255 characters!")
     private String name;
     private String key;
+    @Size(max = 255, message = "Description may not be longer than 255!")
     private String description;
     // TODO: Find problem with FetchType.LAZY,
     //  (Unable to perform requested lazy initialization - session is closed and settings disallow loading outside the Session
