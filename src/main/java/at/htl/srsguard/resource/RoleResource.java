@@ -83,6 +83,10 @@ public class RoleResource {
             return Response.status(404).build();
         }
 
+        if (appStreamList == null) {
+            return Response.status(422).build();
+        }
+
         Set<AppStream> duplicatePayload = this.rolePermissionService.getDuplicates(appStreamList);
         if (duplicatePayload.size() > 0) {
             return Response.status(422).entity(duplicatePayload).build();
