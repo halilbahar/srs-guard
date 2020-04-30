@@ -4,6 +4,7 @@ import at.htl.srsguard.model.AppStream;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public class Role {
     private String name;
     private String description;
     @ManyToMany
-    private List<Permission> permissions;
+    private List<Permission> permissions = new LinkedList<>();
 
     public Role(String name, String description) {
         this.name = name;
@@ -52,7 +53,7 @@ public class Role {
     }
 
     public List<AppStream> getPermissions() {
-        return permissions.stream()
+        return new LinkedList<>(permissions).stream()
                 .map(permission -> new AppStream(permission.getApp().getName(), permission.getStream().getName()))
                 .collect(Collectors.toList());
     }
