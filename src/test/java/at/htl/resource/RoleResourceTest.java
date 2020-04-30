@@ -7,13 +7,9 @@ import org.junit.jupiter.api.Test;
 import javax.json.Json;
 import javax.json.JsonObject;
 
-import java.util.Random;
-
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.patch;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.any;
 
 @QuarkusTest
 public class RoleResourceTest {
@@ -79,6 +75,7 @@ public class RoleResourceTest {
                 .add("name", Helper.generateRandomString(256))
                 .add("description", "test: testCreateRoleWithTooLongName")
                 .build();
+
         given()
             .contentType(JSON)
             .body(payload.toString())
