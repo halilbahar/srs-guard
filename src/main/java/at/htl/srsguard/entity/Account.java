@@ -1,11 +1,9 @@
 package at.htl.srsguard.entity;
 
-import org.hibernate.validator.constraints.Length;
+import at.htl.srsguard.util.ApiKeyGenerator;
 
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +30,7 @@ public class Account {
     }
 
     public Account() {
+        this.key = ApiKeyGenerator.generateKey();
     }
 
     public Long getId() {
